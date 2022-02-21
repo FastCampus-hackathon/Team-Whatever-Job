@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { Container } from '../components/styled';
 import mixins from '../styles/mixins';
 
-interface JobCardProps {
+export interface JobCardProps {
   title: string;
   company: string;
   location: string;
@@ -19,7 +19,7 @@ interface JobCardProps {
   imageUrl: string;
 }
 
-const JobCardContainer = styled.ul`
+export const JobCardContainer = styled.ul`
   display: flex;
   justify-content: center;
   margin-top: 5vh;
@@ -66,25 +66,25 @@ const JobApplyConut = styled.div`
   }
 `;
 
-const JobTitle = styled.h3`
+export const JobTitle = styled.h3`
   ${mixins.fontStyle.body_02};
   width: 80%;
   margin-top: 20px;
 `;
 
-const JobCompanyName = styled.div`
+export const JobCompanyName = styled.div`
   ${mixins.fontStyle.body_07};
   margin-top: 8px;
   color: ${({ theme }) => theme.colors.grayscale_03};
 `;
 
-const JobTags = styled.ul`
+export const JobTags = styled.ul`
   display: flex;
   gap: 4px;
   margin-top: 8px;
 `;
 
-const JobTag = styled.li`
+export const JobTag = styled.li`
   ${mixins.fontStyle.body_09};
   padding: 0 4px;
   color: ${({ theme }) => theme.colors.grayscale_04};
@@ -93,23 +93,22 @@ const JobTag = styled.li`
   border-radius: 4px;
 `;
 
-const JobExpirationWrapper = styled.div`
+export const JobExpirationWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-top: 16px; 
 `;
 
-const JobExpiration = styled.div`
+export const JobExpiration = styled.div`
   ${mixins.fontStyle.body_08};
   color: ${({ theme }) => theme.colors.grayscale_03};
 `;
 
-const JobDDay = styled.div`
+export const JobDDay = styled.div`
   ${mixins.fontStyle.body_03};
   color: ${({ theme }) => theme.colors.blue_01};
 `;
-
 
 function JobCards() {
   const getRandomInt = () => {
