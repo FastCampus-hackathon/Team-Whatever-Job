@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -31,15 +32,33 @@ const CheckBox = styled.input`
 
 
 function SignUp() {
+  const navigate = useNavigate();
   const [id, handleIdChange] = useInput('');
   const [password, handlePasswordChange] = useInput('');
   const [isAgreed, setIsAgreed] = useState(false);
   const [isSubmitActive, setIsSubmitActive] = useState(false);
 
-  const handleClickSubmit: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+  const handleClickSignUp: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
+
+    if (!id) {
+      alert('아이디를 입력해주세요');
+      return;
+    }
+
+    if (!password) {
+      alert('비밀번호를 입력해주세요');
+      return;
+    }
+
+    if (!isAgreed) {
+      alert('개인정보 수집 및 이용에 동의해주세요');
+      return;
+    }
+
     // TODO: 비동기 회원가입 요청
     console.log('sign up!');
+    navigate('/signin');
   };
 
   useEffect(() => {
@@ -88,7 +107,7 @@ function SignUp() {
           </InputBox>
           <SubmitButton
             type="submit"
-            onClick={handleClickSubmit}
+            onClick={handleClickSignUp}
             isActive={isSubmitActive}
           >
             가입
