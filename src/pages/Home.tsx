@@ -30,11 +30,11 @@ const LogoBox = styled.div`
   text-align: center;
 `;
 
-const Form = styled.form`
+export const Form = styled.form`
   margin-top: 20px;
 `;
 
-const SearchCategories = styled.ul`
+export const SearchCategories = styled.ul`
   display: flex;
   gap: 8px;
   flex-wrap: nowrap;
@@ -45,7 +45,7 @@ const SearchCategories = styled.ul`
   }
 `;
 
-const SearchCategory = styled.li`
+export const SearchCategory = styled.li`
   ${mixins.fontStyle.body_08};
   display: flex;
   flex-wrap: nowrap;
@@ -57,11 +57,11 @@ const SearchCategory = styled.li`
   border-radius: 6px;
 `;
 
-const SearchCategoryName = styled.div`
+export const SearchCategoryName = styled.div`
   color: ${({ theme }) => theme.colors.grayscale_02};
 `;
 
-const SearchCategorySelected = styled.div`
+export const SearchCategorySelected = styled.div`
   color: ${({ theme }) => theme.colors.blue_01};
 `;
 
