@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -111,7 +112,7 @@ const JobCheckBox = styled.div`
 
 const ButtonBox = styled.div`
   position: sticky;
-  bottom: 48px;
+  bottom: 12px;
   display: grid;
   grid-template-columns: 64px 1fr;
   gap: 8px;
@@ -278,7 +279,9 @@ function MyPage() {
                   <div>{memo}</div>
                 </JobMemo>
                 : <JobMemo>
-                  <button>메모하기</button>
+                  <button>
+                    <Link to={`/memo/${id}`}>메모하기</Link>
+                  </button>
                 </JobMemo>
               }
             </MyCard>
