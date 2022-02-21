@@ -1,45 +1,36 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import useInput from '../hooks/useInput';
 import mixins from '../styles/mixins';
 
-function SignUp() {
-  const [id, handleIdChange] = useInput('');
-  const [password, handlePasswordChange] = useInput('');
-
-  const handleClickSubmit: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
-    e.preventDefault();
-    // TODO: 비동기 회원가입 요청
-    console.log('sign up!');
-  };
-
-  const Header = styled.h1`
+const Header = styled.h1`
     ${mixins.fontStyle.headline_03};
     padding: 12px 0;
     text-align: center; 
     border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
   `;
 
-  const Container = styled.div`
+const Container = styled.div`
     position: relative;
     margin: 0 24px;
   `;
 
-  const Form = styled.form`
+const Form = styled.form`
     margin-top: 96px;
   `;
 
-  const InputBox = styled.div`
+const InputBox = styled.div`
     margin-bottom: 16px;
   `;
 
-  const Label = styled.label`
+const Label = styled.label`
     ${mixins.fontStyle.body_07};
     display: block;
     margin-bottom: 4px;
   `;
 
-  const Input = styled.input`
+const Input = styled.input`
     ${mixins.fontStyle.body_07};
     width: 100%;
     height: 50px;
@@ -49,19 +40,20 @@ function SignUp() {
     border-radius: 10px;
   `;
 
-  const AgreeLabel = styled.label`
+
+const AgreeLabel = styled.label`
     ${mixins.fontStyle.body_07};
     color: ${({ theme }) => theme.colors.grayscale_04};
     vertical-align: middle;
   `;
 
-  const CheckBox = styled.input`
+const CheckBox = styled.input`
     width: 18px;
     height: 18px;
     vertical-align: middle;
   `;
 
-  const SubmitButton = styled.button`
+const SubmitButton = styled.button`
     ${mixins.fontStyle.body_02};
     position: fixed;
     bottom: 48px;
@@ -76,11 +68,22 @@ function SignUp() {
     border-radius: 8px;
   `;
 
+function SignUp() {
+  const [id, handleIdChange] = useInput('');
+  const [password, handlePasswordChange] = useInput('');
+  const [isAgreed, setIsAgreed] = useState(false);
+
+  const handleClickSubmit: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+    e.preventDefault();
+    // TODO: 비동기 회원가입 요청
+    console.log('sign up!');
+  };
+
   return (
     <>
       <Header>회원가입</Header>
       <Container>
-        <Form action="">
+        <Form>
           <InputBox>
             <Label htmlFor="id">아이디</Label>
             <Input
@@ -107,6 +110,8 @@ function SignUp() {
             <CheckBox
               name="agree"
               type="checkbox"
+              checked={isAgreed}
+              onChange={() => setIsAgreed(prev => !prev)}
             />
           </InputBox>
           <SubmitButton
