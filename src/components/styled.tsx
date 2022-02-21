@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 import mixins from '../styles/mixins';
 
@@ -34,7 +34,7 @@ export const Input = styled.input`
     border-radius: 10px;
   `;
 
-export const SubmitButton = styled.button`
+export const SubmitButton = styled.button<any>`
     ${mixins.fontStyle.body_02};
     position: fixed;
     bottom: 48px;
@@ -43,7 +43,11 @@ export const SubmitButton = styled.button`
     display: block;
     width: 90%;
     height: 52px;
-    background-color: ${({ theme }) => theme.colors.blue_02};
+    background-color: ${({ theme, isActive }) => (
+    isActive
+      ? theme.colors.blue_02
+      : theme.colors.blue_03
+  )};
     color: ${({ theme }) => theme.colors.white};
     border: none;
     border-radius: 8px;
