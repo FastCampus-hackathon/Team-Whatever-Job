@@ -92,6 +92,11 @@ const JobMemo = styled.div`
     background: inherit; 
     border: none; 
     cursor: pointer;
+
+    a {
+      text-decoration: none; 
+      color: inherit;
+    }
   }
 
   div {
@@ -275,7 +280,9 @@ function MyPage() {
               </Container>
               {memo
                 ? <JobMemo>
-                  <button>수정</button>
+                  <button>
+                    <Link to={`/memo/${id}`}>수정</Link>
+                  </button>
                   <div>{memo}</div>
                 </JobMemo>
                 : <JobMemo>
