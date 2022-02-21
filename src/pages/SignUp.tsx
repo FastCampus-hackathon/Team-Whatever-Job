@@ -1,43 +1,19 @@
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import {
+  Container,
+  Header,
+  Input,
+  InputBox,
+  Label,
+  SubmitButton,
+} from '../components/styled';
 import useInput from '../hooks/useInput';
 import mixins from '../styles/mixins';
 
-const Header = styled.h1`
-    ${mixins.fontStyle.headline_03};
-    padding: 12px 0;
-    text-align: center; 
-    border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
-  `;
-
-const Container = styled.div`
-    position: relative;
-    margin: 0 24px;
-  `;
-
 const Form = styled.form`
     margin-top: 96px;
-  `;
-
-const InputBox = styled.div`
-    margin-bottom: 16px;
-  `;
-
-const Label = styled.label`
-    ${mixins.fontStyle.body_07};
-    display: block;
-    margin-bottom: 4px;
-  `;
-
-const Input = styled.input`
-    ${mixins.fontStyle.body_07};
-    width: 100%;
-    height: 50px;
-    padding: 12px 16px;
-    box-sizing: border-box;
-    border: 1px solid #E5E5E5;
-    border-radius: 10px;
   `;
 
 
@@ -53,20 +29,6 @@ const CheckBox = styled.input`
     vertical-align: middle;
   `;
 
-const SubmitButton = styled.button`
-    ${mixins.fontStyle.body_02};
-    position: fixed;
-    bottom: 48px;
-    left: 50%;
-    transform: translate(-50%, 0);
-    display: block;
-    width: 90%;
-    height: 52px;
-    background-color: ${({ theme }) => theme.colors.blue_02};
-    color: ${({ theme }) => theme.colors.white};
-    border: none;
-    border-radius: 8px;
-  `;
 
 function SignUp() {
   const [id, handleIdChange] = useInput('');
