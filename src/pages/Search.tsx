@@ -24,19 +24,12 @@ const Header = styled.div `
   border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
 `;
 
-const LoginButton = styled.button`
+const MyPageButton = styled.button`
   ${mixins.fontStyle.body_04};
   height: 60%;
   padding: 8px 20px;
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.blue_02};
+  background: inherit;
   border: none;
-  border-radius: 4px;
-
-  a {
-    text-decoration: none; 
-    color: ${({ theme }) => theme.colors.white}; 
-  }
 `;
 
 const LogoBox = styled.div`
@@ -145,9 +138,11 @@ function Search() {
           <LogoBox>
             <img src="images/logo.png" alt="어구저구 로고" />
           </LogoBox>
-          <LoginButton>
-            <Link to="/signin">로그인</Link>
-          </LoginButton>
+          <MyPageButton>
+            <Link to="/mypage">
+              <img src="images/icon_my.png" alt="" />
+            </Link>
+          </MyPageButton>
         </Header>
         <Form>
           <SearchBar
