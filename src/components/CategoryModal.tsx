@@ -6,6 +6,7 @@ import mixins from '../styles/mixins';
 
 interface ModalProps {
   name: string;
+  setCategory: React.Dispatch<React.SetStateAction<string>>;
   isOpen: boolean;
   closeModal: () => void;
 }
@@ -35,15 +36,23 @@ const ModalHeader = styled.div`
   }
 `;
 
-const Categories = styled.ul`
-  display: grid;
-  grid-template-columns: 1fr 1fr ;
+const Categories = styled.ul<any>`
+  display: grid; 
+  grid-template-columns: ${({ isOneFr }) => (
+    isOneFr
+      ? '1fr'
+      : '1fr 1fr'
+  )};
 `;
 
-const CategoryItem = styled.li`
+const CategoryItem = styled.li<any>`
   ${mixins.fontStyle.body_03};
-  text-align: center; 
-  padding: 12px;
+  text-align: ${({ isOneFr }) => (
+    isOneFr
+      ? 'left'
+      : 'center'
+  )}; 
+  padding: 16px;
   border: 1px solid ${({ theme }) => theme.colors.grayscale_07};
   box-sizing: border-box;
 `;
@@ -54,10 +63,26 @@ const SelectButton = styled.button`
   padding: 12px;
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.blue_02};
+  border: none;
 `;
 
-function CategoryModal({ name, isOpen, closeModal }: ModalProps) {
-  const [categoryItems, setCategoryItems] = useState(new Array(20).fill(true));
+function CategoryModal({
+  name,
+  setCategory,
+  isOpen,
+  closeModal,
+}: ModalProps) {
+  const [categoryItems, setCategoryItems] = useState(new Array(20).fill('선택 아이템'));
+
+  let isOneFr = false;
+  if (name === '고용 형태' || name === '정렬') {
+    isOneFr = true;
+  }
+
+  const handleClickItem = (item: string) => {
+    setCategory(item);
+    closeModal();
+  };
 
   return (
     <div>
@@ -73,9 +98,14 @@ function CategoryModal({ name, isOpen, closeModal }: ModalProps) {
           </div>
         </ModalHeader>
 
-        <Categories>
+        <Categories isOneFr={isOneFr}>
           {categoryItems.map((item, i) => (
-            <CategoryItem key={i}>선택 아이템 </CategoryItem>
+            <CategoryItem
+              key={i}
+              onClick={() => handleClickItem(item)}
+            >
+              {item}
+            </CategoryItem>
           ))}
         </Categories>
         <SelectButton>

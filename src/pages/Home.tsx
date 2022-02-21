@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-import Modal from '../components/Modal';
+import CategoryModal from '../components/CategoryModal';
 import SearchBar from '../components/SearchBar';
 import { Container } from '../components/styled';
+import useInput from '../hooks/useInput';
 import mixins from '../styles/mixins';
 
 const LoginButton = styled.button`
@@ -65,41 +66,124 @@ const SearchCategorySelected = styled.div`
 `;
 
 function Home() {
-  return (
-    <Container>
-      <LoginButton>
-        <Link to="/signin">로그인</Link>
-      </LoginButton>
-      <LogoBox>
-        <img src="images/logo.png" alt="어구저구 로고" />
-      </LogoBox>
-      <Form>
-        <SearchBar />
-        <SearchCategories>
-          <SearchCategory>
-            <SearchCategoryName>직무</SearchCategoryName>
-            <SearchCategorySelected>선택</SearchCategorySelected>
-            <img src="images/icon_dropdown.svg" alt="선택" />
-          </SearchCategory>
-          <SearchCategory>
-            <SearchCategoryName>지역</SearchCategoryName>
-            <SearchCategorySelected>선택</SearchCategorySelected>
-            <img src="images/icon_dropdown.svg" alt="선택" />
-          </SearchCategory>
-          <SearchCategory>
-            <SearchCategoryName>고용 형태</SearchCategoryName>
-            <SearchCategorySelected>선택</SearchCategorySelected>
-            <img src="images/icon_dropdown.svg" alt="선택" />
-          </SearchCategory>
-          <SearchCategory>
-            <SearchCategoryName>정렬</SearchCategoryName>
-            <SearchCategorySelected>최신순</SearchCategorySelected>
-            <img src="images/icon_dropdown.svg" alt="선택" />
-          </SearchCategory>
-        </SearchCategories>
+  const [keyword, handleKeyword] = useInput('');
+  const [job, setJob] = useState('');
+  const [location, setLocation] = useState('');
+  const [workType, setWorkType] = useState('');
+  const [sort, setSort] = useState('최신순');
 
-      </Form>
-    </Container>
+  const [isJobModalOpen, setIsJobModalOpen] = useState(false);
+  const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
+  const [isWorkTypeModalOpen, setIsWorkTypeModalOpen] = useState(false);
+  const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+
+  const openModal = (category: string) => {
+    if (category === '직무') {
+      setIsJobModalOpen(true);
+    }
+
+    if (category === '지역') {
+      setIsLocationModalOpen(true);
+    }
+
+    if (category === '고용 형태') {
+      setIsWorkTypeModalOpen(true);
+    }
+
+    if (category === '정렬') {
+      setIsSortModalOpen(true);
+    }
+  };
+
+  const closeModal = (category: string) => {
+    if (category === '직무') {
+      setIsJobModalOpen(false);
+    }
+
+    if (category === '지역') {
+      setIsLocationModalOpen(false);
+    }
+
+    if (category === '고용 형태') {
+      setIsWorkTypeModalOpen(false);
+    }
+
+    if (category === '정렬') {
+      setIsSortModalOpen(false);
+    }
+  };
+
+  return (
+    <>
+      <Container>
+        <LoginButton>
+          <Link to="/signin">로그인</Link>
+        </LoginButton>
+        <LogoBox>
+          <img src="images/logo.png" alt="어구저구 로고" />
+        </LogoBox>
+        <Form>
+          <SearchBar
+            keyword={keyword}
+            handleKeyword={handleKeyword}
+          />
+          <SearchCategories>
+            <SearchCategory onClick={() => openModal('직무')}>
+              <SearchCategoryName>직무</SearchCategoryName>
+              <SearchCategorySelected>
+                {job || '선택'}
+              </SearchCategorySelected>
+              <img src="images/icon_dropdown.svg" alt="선택" />
+            </SearchCategory>
+            <SearchCategory onClick={() => openModal('지역')}>
+              <SearchCategoryName>지역</SearchCategoryName>
+              <SearchCategorySelected>
+                {location || '선택'}
+              </SearchCategorySelected>
+              <img src="images/icon_dropdown.svg" alt="선택" />
+            </SearchCategory>
+            <SearchCategory onClick={() => openModal('고용 형태')}>
+              <SearchCategoryName>고용 형태</SearchCategoryName>
+              <SearchCategorySelected>
+                {workType || '선택'}
+              </SearchCategorySelected>
+              <img src="images/icon_dropdown.svg" alt="선택" />
+            </SearchCategory>
+            <SearchCategory onClick={() => openModal('정렬')}>
+              <SearchCategoryName>정렬</SearchCategoryName>
+              <SearchCategorySelected>
+                {sort}
+              </SearchCategorySelected>
+              <img src="images/icon_dropdown.svg" alt="선택" />
+            </SearchCategory>
+          </SearchCategories>
+        </Form>
+      </Container>
+      <CategoryModal
+        name="직무 선택"
+        setCategory={setJob}
+        isOpen={isJobModalOpen}
+        closeModal={() => closeModal('직무')}
+      />
+      <CategoryModal
+        name="지역 선택"
+        setCategory={setLocation}
+        isOpen={isLocationModalOpen}
+        closeModal={() => closeModal('지역')}
+      />
+      <CategoryModal
+        name="고용 형태"
+        setCategory={setWorkType}
+        isOpen={isWorkTypeModalOpen}
+        closeModal={() => closeModal('고용 형태')}
+      />
+      <CategoryModal
+        name="정렬"
+        setCategory={setSort}
+        isOpen={isSortModalOpen}
+        closeModal={() => closeModal('정렬')}
+      />
+    </>
   );
 }
 

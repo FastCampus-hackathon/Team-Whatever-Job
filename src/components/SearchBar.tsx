@@ -1,8 +1,11 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 
-import useInput from '../hooks/useInput';
 import mixins from '../styles/mixins';
+
+interface SearchBarProps {
+  keyword: string;
+  handleKeyword: any;
+}
 
 const SearchContainer = styled.div`
   position: relative;
@@ -28,9 +31,7 @@ const SearchIcon = styled.div`
   height: 24px;
 `;
 
-function SearchBar() {
-  const [keyword, handleKeyword] = useInput('');
-
+function SearchBar({ keyword, handleKeyword }: SearchBarProps) {
   return (
     <SearchContainer>
       <SearchInput
