@@ -1,0 +1,86 @@
+{
+  "overrides": [
+    {
+      "files": ["**/*.ts?(x)"],
+      "parser": "@typescript-eslint/parser",
+      "plugins": ["@typescript-eslint", "simple-import-sort"],
+      "extends": [
+        "react-app",
+        "plugin:@typescript-eslint/recommended"
+      ],
+      "rules": {
+        "indent": ["error", 2],
+        "no-trailing-spaces": "error",
+        "curly": "error",
+        "no-multi-spaces": "error",
+        "comma-dangle": ["error", "always-multiline"],
+        "object-curly-spacing": ["error", "always"],
+        "key-spacing": ["error", { "mode": "strict" }],
+        "linebreak-style": "off",
+        "semi": "error",
+        "eol-last": ["error", "always"],
+        "max-len": ["error", { "code": 100 }],
+        "quotes": ["error", "single"],
+        "simple-import-sort/imports": "error",
+        "simple-import-sort/exports": "error",
+        "jsx-quotes": ["error", "prefer-double"],
+        "react/jsx-tag-spacing": "error",
+        "no-use-before-define": "error",
+        "array-bracket-newline": [
+          "error",
+          {
+            "multiline": true,
+            "minItems": null
+          }
+        ],
+        "array-bracket-spacing": "error",
+        "brace-style": [
+            "error",
+            "1tbs",
+            {"allowSingleLine": true}
+        ],
+        "block-spacing": "error",
+        "comma-spacing": "error",
+        "comma-style": "error",
+        "computed-property-spacing": "error",
+        "func-call-spacing": "error",
+        "implicit-arrow-linebreak": [
+            "error",
+            "beside"
+        ],
+        "keyword-spacing": "error",
+        "no-mixed-operators": "error",
+        "no-multiple-empty-lines": [
+          "error",
+          { 
+            "max": 2,
+            "maxEOF": 1
+          }
+        ],
+        "no-tabs": "error",
+        "no-unneeded-ternary": "error",
+        "no-whitespace-before-property": "error",
+        "nonblock-statement-body-position": "error",
+        "object-property-newline": [
+          "error",
+          { "allowAllPropertiesOnSameLine": true }
+        ],
+        "quote-props": [
+            "error",
+            "as-needed"
+        ],
+        "space-before-blocks": "error",
+        "space-in-parens": "error",
+        "space-infix-ops": "error",
+        "space-unary-ops": "error",
+        "arrow-spacing": "error",
+        "no-confusing-arrow": "error",
+        "no-duplicate-imports": "error",
+        "no-var": "error",
+        "object-shorthand": "error",
+        "prefer-const": "error",
+        "prefer-template": "error"
+      }
+    }
+  ]
+}
