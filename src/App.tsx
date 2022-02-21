@@ -3,6 +3,7 @@ import { ThemeProvider } from 'styled-components';
 import { Reset } from 'styled-reset';
 
 import Home from './pages/Home';
+import Memo from './pages/Memo';
 import MyPage from './pages/MyPage';
 import Search from './pages/Search';
 import SignIn from './pages/SignIn';
@@ -20,6 +21,7 @@ function App() {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/search" element={<Search />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/memo/*" element={<Memo />} />
         </Routes>
       </ThemeProvider>
     </div>
