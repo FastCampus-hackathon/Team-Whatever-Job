@@ -1,18 +1,32 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CategoryModal from '../components/CategoryModal';
+import JobCards from '../components/JobCards';
 import SearchBar from '../components/SearchBar';
 import { Container } from '../components/styled';
 import useInput from '../hooks/useInput';
 import mixins from '../styles/mixins';
+import {
+  Form,
+  SearchCategories,
+  SearchCategory,
+  SearchCategoryName,
+  SearchCategorySelected,
+} from './Home';
+
+const Header = styled.div `
+  display: flex;
+  justify-content: space-between;
+  height: 60px;
+  margin-top: 20px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
+`;
 
 const LoginButton = styled.button`
-  ${mixins.fontStyle.body_04};  
-  position: fixed;
-  top: 20px;
-  right: 24px;
+  ${mixins.fontStyle.body_04};
+  height: 60%;
   padding: 8px 20px;
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.blue_02};
@@ -26,56 +40,67 @@ const LoginButton = styled.button`
 `;
 
 const LogoBox = styled.div`
-  margin-top: 40vh;
-  text-align: center;
+img {
+  width: 124px;
+}
 `;
 
-export const Form = styled.form`
-  margin-top: 20px;
-`;
+const GestureTutorial = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  width: 100%;
+  height: 100%;
 
-export const SearchCategories = styled.ul`
-  display: flex;
-  gap: 8px;
-  flex-wrap: nowrap;
-  overflow: auto;
+  button {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    z-index: 200;
+    background: inherit; 
+    border: none; 
+    cursor: pointer;
+  }
 
-  li {
-    flex: 0 0 auto;
+  > img {
+    width: 100%;
+    height: 100%;
+  }
+
+  div {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 200;
   }
 `;
 
-export const SearchCategory = styled.li`
-  ${mixins.fontStyle.body_08};
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 6px; 
-  overflow: auto;
-  padding: 8px 12px;
-  border: 1px solid ${({ theme }) => theme.colors.blue_03};
-  box-sizing: border-box;
-  border-radius: 6px;
-`;
+// const SearchResult = styled.ul`
 
-export const SearchCategoryName = styled.div`
-  color: ${({ theme }) => theme.colors.grayscale_02};
-`;
+// `;
 
-export const SearchCategorySelected = styled.div`
-  color: ${({ theme }) => theme.colors.blue_01};
-`;
-
-function Home() {
+function Search() {
+  // TODO: 하드 코딩함, Home과 겹치는 부분 리팩토링
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
   const [location, setLocation] = useState('');
   const [workType, setWorkType] = useState('');
   const [sort, setSort] = useState('최신순');
 
+  const [isTutorialView, setIsTutorialView] = useState(true);
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isWorkTypeModalOpen, setIsWorkTypeModalOpen] = useState(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+
+  const [result, setReult] = useState(new Array(10).fill(true));
+
+  // useEffect(() => {
+  //   setIsTutorialView(false);
+  //   // TODO: 처음에만 뜨도록
+  // }, [deps]);
 
   const openModal = (category: string) => {
     if (category === '직무') {
@@ -116,19 +141,19 @@ function Home() {
   return (
     <>
       <Container>
-        <LoginButton>
-          <Link to="/signin">로그인</Link>
-        </LoginButton>
-        <LogoBox>
-          <img src="images/logo.png" alt="어구저구 로고" />
-        </LogoBox>
+        <Header>
+          <LogoBox>
+            <img src="images/logo.png" alt="어구저구 로고" />
+          </LogoBox>
+          <LoginButton>
+            <Link to="/signin">로그인</Link>
+          </LoginButton>
+        </Header>
         <Form>
-          <Link to="/search">
-            <SearchBar
-              keyword={keyword}
-              handleKeyword={handleKeyword}
-            />
-          </Link>
+          <SearchBar
+            keyword={keyword}
+            handleKeyword={handleKeyword}
+          />
           <SearchCategories>
             <SearchCategory onClick={() => openModal('직무')}>
               <SearchCategoryName>직무</SearchCategoryName>
@@ -185,8 +210,18 @@ function Home() {
         isOpen={isSortModalOpen}
         closeModal={() => closeModal('정렬')}
       />
+      <JobCards />
+      {isTutorialView && <GestureTutorial>
+        <img src="images/tutorial-background.png" alt="" />
+        <div>
+          <img src="images/tutorial-gesture.png" alt="제스처" />
+        </div>
+        <button onClick={() => setIsTutorialView(false)}>
+          <img src="images/icon_close.svg" alt="닫기" />
+        </button>
+      </GestureTutorial>}
     </>
   );
 }
 
-export default Home;
+export default Search;
