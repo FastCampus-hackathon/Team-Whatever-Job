@@ -36,6 +36,7 @@ function SearchBar({ keyword, handleKeyword }: SearchBarProps) {
     <SearchContainer>
       <SearchInput
         type="text"
+        autoFocus={true}
         placeholder="회사, 직무, 키워드 검색"
         value={keyword}
         onChange={handleKeyword}
