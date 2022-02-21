@@ -34,12 +34,22 @@ function SignUp() {
   const [id, handleIdChange] = useInput('');
   const [password, handlePasswordChange] = useInput('');
   const [isAgreed, setIsAgreed] = useState(false);
+  const [isSubmitActive, setIsSubmitActive] = useState(false);
 
   const handleClickSubmit: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     // TODO: 비동기 회원가입 요청
     console.log('sign up!');
   };
+
+  useEffect(() => {
+    if (id && password && isAgreed) {
+      // TODO: 로그인 버튼 눌리도록
+      setIsSubmitActive(true);
+    } else {
+      setIsSubmitActive(false);
+    }
+  }, [id, password, isAgreed]);
 
   return (
     <>
@@ -79,6 +89,7 @@ function SignUp() {
           <SubmitButton
             type="submit"
             onClick={handleClickSubmit}
+            isActive={isSubmitActive}
           >
             가입
           </SubmitButton>
