@@ -24,6 +24,7 @@ import {
 const Header = styled.div `
   display: flex;
   justify-content: space-between;
+  align-items: center;
   height: 60px;
   margin-top: 20px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
@@ -31,10 +32,8 @@ const Header = styled.div `
 
 const LoginButton = styled.button`
   ${mixins.fontStyle.body_04};  
-  position: fixed;
-  top: 20px;
-  right: 24px;
-  padding: 8px 20px;
+  height: 36px;
+  padding: 6px 20px;
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.blue_02};
   border: none;
