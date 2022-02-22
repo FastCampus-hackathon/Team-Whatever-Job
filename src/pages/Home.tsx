@@ -6,6 +6,7 @@ import {
   fetchJobCategories,
   fetchJobTypeCategories,
   fetchLocationCategories,
+  requestSearch,
 } from '../apis/search';
 import CategoryModal from '../components/CategoryModal';
 import SearchBar from '../components/SearchBar';
@@ -87,7 +88,7 @@ function Home({ token }: {
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
   const [location, setLocation] = useState('');
-  const [workType, setJobType] = useState('');
+  const [jobType, setJobType] = useState('');
   const [sort, setSort] = useState('최신순');
 
   const [jobs, setJobs] = useState<string[]>([]);
@@ -165,6 +166,27 @@ function Home({ token }: {
     }
   };
 
+  const handleSearch = async () => {
+    let sorting = 'pd';
+    if (sort === '인기순') {
+      sorting = 'rc';
+    }
+
+    const searchParams = {
+      keyword,
+      start: 0,
+      count: 10,
+      job,
+      loc_mcd: location,
+      loc_bcd: location,
+      jobType,
+      sort: sorting,
+    };
+    const { jobs } = await requestSearch(searchParams);
+    console.log(jobs);
+    return jobs;
+  };
+
   return (
     <>
       <Container>
@@ -185,6 +207,7 @@ function Home({ token }: {
             <SearchBar
               keyword={keyword}
               handleKeyword={handleKeyword}
+              handleSearch={handleSearch}
             />
           </Link>
           <SearchCategories>
@@ -205,7 +228,7 @@ function Home({ token }: {
             <SearchCategory onClick={() => openModal('고용 형태')}>
               <SearchCategoryName>고용 형태</SearchCategoryName>
               <SearchCategorySelected>
-                {workType || '선택'}
+                {jobType || '선택'}
               </SearchCategorySelected>
               <img src="images/icon_dropdown.svg" alt="선택" />
             </SearchCategory>
