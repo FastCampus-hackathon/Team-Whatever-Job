@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import {
+  fetchJobCategories,
+  fetchJobTypeCategories,
+  fetchLocationCategories,
+} from '../apis/search';
 import CategoryModal from '../components/CategoryModal';
 import JobCards from '../components/JobCards';
 import SearchBar from '../components/SearchBar';
@@ -24,6 +29,23 @@ const Header = styled.div `
   border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
 `;
 
+const LoginButton = styled.button`
+  ${mixins.fontStyle.body_04};  
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  padding: 8px 20px;
+  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.blue_02};
+  border: none;
+  border-radius: 4px;
+
+  a {
+    text-decoration: none; 
+    color: ${({ theme }) => theme.colors.white}; 
+  }
+`;
+
 const MyPageButton = styled.button`
   ${mixins.fontStyle.body_04};
   height: 60%;
@@ -33,9 +55,9 @@ const MyPageButton = styled.button`
 `;
 
 const LogoBox = styled.div`
-img {
-  width: 124px;
-}
+  img {
+    width: 124px;
+  }
 `;
 
 const GestureTutorial = styled.div`
@@ -74,26 +96,60 @@ const GestureTutorial = styled.div`
 
 // `;
 
-function Search() {
+function Search({ token }: {
+  token: string | null
+}) {
+  const navigate = useNavigate();
   // TODO: 하드 코딩함, Home과 겹치는 부분 리팩토링
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
   const [location, setLocation] = useState('');
-  const [workType, setWorkType] = useState('');
+  const [jobType, setJobType] = useState('');
   const [sort, setSort] = useState('최신순');
 
-  const [isTutorialView, setIsTutorialView] = useState(true);
+  const [jobs, setJobs] = useState<string[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
+  const [jobTypes, setJobTypes] = useState<string[]>([]);
+  const sorts = ['최신순', '인기순'];
+
+  const [isTutorialView, setIsTutorialView] = useState(false);
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
-  const [isWorkTypeModalOpen, setIsWorkTypeModalOpen] = useState(false);
+  const [isjobTypeModalOpen, setIsjobTypeModalOpen] = useState(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
 
   const [result, setReult] = useState(new Array(10).fill(true));
 
-  // useEffect(() => {
-  //   setIsTutorialView(false);
-  //   // TODO: 처음에만 뜨도록
-  // }, [deps]);
+  useEffect(() => {
+    (function() {
+      if (window.localStorage) {
+        if (!localStorage.getItem('firstLoad')) {
+          setIsTutorialView(true);
+          localStorage['firstLoad'] = true;
+        } else {
+          setIsTutorialView(false);
+        }
+      }
+    })();
+  }, []);
+
+  // 카테고리 불러오기
+  useEffect(() => {
+    (async () => {
+      const res = await fetchJobCategories();
+      setJobs(res);
+    })();
+
+    (async () => {
+      const res = await fetchJobTypeCategories();
+      setJobTypes(res);
+    })();
+
+    (async () => {
+      const res = await fetchLocationCategories();
+      setLocations(res);
+    })();
+  }, []);
 
   const openModal = (category: string) => {
     if (category === '직무') {
@@ -105,7 +161,7 @@ function Search() {
     }
 
     if (category === '고용 형태') {
-      setIsWorkTypeModalOpen(true);
+      setIsjobTypeModalOpen(true);
     }
 
     if (category === '정렬') {
@@ -123,7 +179,7 @@ function Search() {
     }
 
     if (category === '고용 형태') {
-      setIsWorkTypeModalOpen(false);
+      setIsjobTypeModalOpen(false);
     }
 
     if (category === '정렬') {
@@ -138,11 +194,15 @@ function Search() {
           <LogoBox>
             <img src="images/logo.png" alt="어구저구 로고" />
           </LogoBox>
-          <MyPageButton>
-            <Link to="/mypage">
-              <img src="images/icon_my.png" alt="" />
-            </Link>
-          </MyPageButton>
+          {!token
+            ? <LoginButton onClick={() => navigate('/signin')}>
+            로그인
+            </LoginButton>
+            : <MyPageButton>
+              <Link to="/mypage">
+                <img src="images/icon_my.png" alt="마이 페이지" />
+              </Link>
+            </MyPageButton>}
         </Header>
         <Form>
           <SearchBar
@@ -167,7 +227,7 @@ function Search() {
             <SearchCategory onClick={() => openModal('고용 형태')}>
               <SearchCategoryName>고용 형태</SearchCategoryName>
               <SearchCategorySelected>
-                {workType || '선택'}
+                {jobType || '선택'}
               </SearchCategorySelected>
               <img src="images/icon_dropdown.svg" alt="선택" />
             </SearchCategory>
@@ -183,24 +243,29 @@ function Search() {
       </Container>
       <CategoryModal
         name="직무 선택"
+        data={jobs}
         setCategory={setJob}
         isOpen={isJobModalOpen}
         closeModal={() => closeModal('직무')}
       />
       <CategoryModal
         name="지역 선택"
+        data={locations}
+        setData={setLocations}
         setCategory={setLocation}
         isOpen={isLocationModalOpen}
         closeModal={() => closeModal('지역')}
       />
       <CategoryModal
         name="고용 형태"
-        setCategory={setWorkType}
-        isOpen={isWorkTypeModalOpen}
+        data={jobTypes}
+        setCategory={setJobType}
+        isOpen={isjobTypeModalOpen}
         closeModal={() => closeModal('고용 형태')}
       />
       <CategoryModal
         name="정렬"
+        data={sorts}
         setCategory={setSort}
         isOpen={isSortModalOpen}
         closeModal={() => closeModal('정렬')}

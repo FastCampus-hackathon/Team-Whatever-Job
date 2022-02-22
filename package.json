@@ -6,6 +6,7 @@
     "@types/node": "^16.11.25",
     "@types/react": "^17.0.39",
     "@types/react-dom": "^17.0.11",
+    "axios": "^0.26.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-modal": "^3.14.4",
@@ -40,10 +41,12 @@
   },
   "devDependencies": {
     "@types/react-modal": "^3.13.1",
+    "@types/styled-components": "^5.1.23",
     "@typescript-eslint/eslint-plugin": "^5.12.0",
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-react": "^7.22.0",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-simple-import-sort": "^7.0.0"
-  }
+  },
+  "proxy": "http://54.180.103.131:8080"
 }

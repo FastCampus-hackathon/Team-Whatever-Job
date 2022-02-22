@@ -1,7 +1,12 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import {
+  fetchJobCategories,
+  fetchJobTypeCategories,
+  fetchLocationCategories,
+} from '../apis/search';
 import CategoryModal from '../components/CategoryModal';
 import SearchBar from '../components/SearchBar';
 import { Container } from '../components/styled';
@@ -23,6 +28,16 @@ const LoginButton = styled.button`
     text-decoration: none; 
     color: ${({ theme }) => theme.colors.white}; 
   }
+`;
+
+const MyPageButton = styled.button`
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: inherit;
 `;
 
 const LogoBox = styled.div`
@@ -65,17 +80,54 @@ export const SearchCategorySelected = styled.div`
   color: ${({ theme }) => theme.colors.blue_01};
 `;
 
-function Home() {
+function Home({ token }: {
+  token: string | null
+}) {
+  const navigate = useNavigate();
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
   const [location, setLocation] = useState('');
-  const [workType, setWorkType] = useState('');
+  const [workType, setJobType] = useState('');
   const [sort, setSort] = useState('최신순');
+
+  const [jobs, setJobs] = useState<string[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
+  const [jobTypes, setJobTypes] = useState<string[]>([]);
+  const sorts = ['최신순', '인기순'];
 
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isWorkTypeModalOpen, setIsWorkTypeModalOpen] = useState(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+
+  useEffect(() => {
+    (function() {
+      if (window.localStorage) {
+        if (!localStorage.getItem('firstLoad')) {
+          localStorage['firstLoad'] = true;
+          window.location.reload();
+        } else { localStorage.removeItem('firstLoad'); }
+      }
+    })();
+  }, []);
+
+  // 카테고리 불러오기
+  useEffect(() => {
+    (async () => {
+      const res = await fetchJobCategories();
+      setJobs(res);
+    })();
+
+    (async () => {
+      const res = await fetchJobTypeCategories();
+      setJobTypes(res);
+    })();
+
+    (async () => {
+      const res = await fetchLocationCategories();
+      setLocations(res);
+    })();
+  }, []);
 
   const openModal = (category: string) => {
     if (category === '직무') {
@@ -116,9 +168,15 @@ function Home() {
   return (
     <>
       <Container>
-        <LoginButton>
-          <Link to="/signin">로그인</Link>
-        </LoginButton>
+        {!token
+          ? <LoginButton onClick={() => navigate('/signin')}>
+            로그인
+          </LoginButton>
+          : <MyPageButton>
+            <Link to="/signin">
+              <img src="images/icon_my.png" alt="" />
+            </Link>
+          </MyPageButton>}
         <LogoBox>
           <img src="images/logo.png" alt="어구저구 로고" />
         </LogoBox>
@@ -163,24 +221,28 @@ function Home() {
       </Container>
       <CategoryModal
         name="직무 선택"
+        data={jobs}
         setCategory={setJob}
         isOpen={isJobModalOpen}
         closeModal={() => closeModal('직무')}
       />
       <CategoryModal
         name="지역 선택"
+        data={locations}
         setCategory={setLocation}
         isOpen={isLocationModalOpen}
         closeModal={() => closeModal('지역')}
       />
       <CategoryModal
         name="고용 형태"
-        setCategory={setWorkType}
+        data={jobTypes}
+        setCategory={setJobType}
         isOpen={isWorkTypeModalOpen}
         closeModal={() => closeModal('고용 형태')}
       />
       <CategoryModal
         name="정렬"
+        data={sorts}
         setCategory={setSort}
         isOpen={isSortModalOpen}
         closeModal={() => closeModal('정렬')}
