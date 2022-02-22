@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CategoryModal from '../components/CategoryModal';
@@ -22,6 +22,23 @@ const Header = styled.div `
   height: 60px;
   margin-top: 20px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
+`;
+
+const LoginButton = styled.button`
+  ${mixins.fontStyle.body_04};  
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  padding: 8px 20px;
+  color: ${({ theme }) => theme.colors.white};
+  background-color: ${({ theme }) => theme.colors.blue_02};
+  border: none;
+  border-radius: 4px;
+
+  a {
+    text-decoration: none; 
+    color: ${({ theme }) => theme.colors.white}; 
+  }
 `;
 
 const MyPageButton = styled.button`
@@ -74,7 +91,10 @@ const GestureTutorial = styled.div`
 
 // `;
 
-function Search() {
+function Search({ token }: {
+  token: string | null
+}) {
+  const navigate = useNavigate();
   // TODO: 하드 코딩함, Home과 겹치는 부분 리팩토링
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
@@ -146,11 +166,15 @@ function Search() {
           <LogoBox>
             <img src="images/logo.png" alt="어구저구 로고" />
           </LogoBox>
-          <MyPageButton>
-            <Link to="/mypage">
-              <img src="images/icon_my.png" alt="" />
-            </Link>
-          </MyPageButton>
+          {!token
+            ? <LoginButton onClick={() => navigate('/signin')}>
+            로그인
+            </LoginButton>
+            : <MyPageButton>
+              <Link to="/mypage">
+                <img src="images/icon_my.png" alt="마이 페이지" />
+              </Link>
+            </MyPageButton>}
         </Header>
         <Form>
           <SearchBar

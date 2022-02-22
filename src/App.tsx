@@ -31,7 +31,7 @@ function App() {
           <Route path="/" element={<Home token={token} />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/search" element={<Search />} />
+          <Route path="/search" element={<Search token={token} />} />
           <Route
             path="/mypage"
             element={<MyPage
