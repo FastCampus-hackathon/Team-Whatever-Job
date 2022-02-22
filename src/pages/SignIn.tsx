@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { requestSignIn } from '../apis/auth';
 import {
   Container,
   Header,
@@ -38,8 +39,13 @@ function SignIn() {
       alert('비밀번호를 입력해주세요');
       return;
     }
-    // TODO: 비동기 로그인 요청
-    console.log('log in!');
+
+    const res = await requestSignIn(id, password);
+    if (!res) {
+      alert('아이디 혹은 비밀번호가 틀렸습니다!');
+      return;
+    }
+
     navigate('/');
   };
 
