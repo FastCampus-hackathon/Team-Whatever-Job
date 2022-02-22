@@ -1,6 +1,5 @@
 import './JobCards.css';
 
-import { useState } from 'react';
 import TinderCard from 'react-tinder-card';
 import styled from 'styled-components';
 
@@ -76,6 +75,12 @@ export const JobCompanyName = styled.div`
   ${mixins.fontStyle.body_07};
   margin-top: 8px;
   color: ${({ theme }) => theme.colors.grayscale_03};
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    pointer: cursor;
+  }
 `;
 
 export const JobTags = styled.ul`
@@ -110,67 +115,9 @@ export const JobDDay = styled.div`
   color: ${({ theme }) => theme.colors.blue_01};
 `;
 
-function JobCards() {
-  const getRandomInt = () => {
-    return Math.floor(Math.random() * 200) + 1;
-  };
-  const [cards, setCards] = useState([
-    {
-      title: '[사람인] 시각디자인/서비스디자인 신입 및 경력 직원 모집',
-      company: '사람인',
-      location: '서울 구로구',
-      workType: '정규직',
-      job: '개발',
-      expiration: '02/23(수) 23시 59분 마감',
-      dDay: 'D-1',
-      applyCount: 999,
-      imageUrl: `https://picsum.photos/id/${getRandomInt()}/500`,
-    },
-    {
-      title: '[사람인] 시각디자인/서비스디자인 신입 및 경력 직원 모집',
-      company: '사람인',
-      location: '서울 구로구',
-      workType: '정규직',
-      job: '개발',
-      expiration: '02/23(수) 23시 59분 마감',
-      dDay: 'D-1',
-      applyCount: 999,
-      imageUrl: `https://picsum.photos/id/${getRandomInt()}/500`,
-    },
-    {
-      title: '[사람인] 시각디자인/서비스디자인 신입 및 경력 직원 모집',
-      company: '사람인',
-      location: '서울 구로구',
-      workType: '정규직',
-      job: '개발',
-      expiration: '02/23(수) 23시 59분 마감',
-      dDay: 'D-1',
-      applyCount: 999,
-      imageUrl: `https://picsum.photos/id/${getRandomInt()}/500`,
-    },
-    {
-      title: '[사람인] 시각디자인/서비스디자인 신입 및 경력 직원 모집',
-      company: '사람인',
-      location: '서울 구로구',
-      workType: '정규직',
-      job: '개발',
-      expiration: '02/23(수) 23시 59분 마감',
-      dDay: 'D-1',
-      applyCount: 999,
-      imageUrl: `https://picsum.photos/id/${getRandomInt()}/500`,
-    },
-    {
-      title: '[사람인] 시각디자인/서비스디자인 신입 및 경력 직원 모집',
-      company: '사람인',
-      location: '서울 구로구',
-      workType: '정규직',
-      job: '개발',
-      expiration: '02/23(수) 23시 59분 마감',
-      dDay: 'D-1',
-      applyCount: 999,
-      imageUrl: `https://picsum.photos/id/${getRandomInt()}/500`,
-    },
-  ]);
+function JobCards({ searchResults }: {
+  searchResults: any[]
+}) {
   const selected: string[] = [];
 
   const handleSwipeCard = (direction: string, card: JobCardProps) => {
@@ -188,29 +135,35 @@ function JobCards() {
   return (
     <Container>
       <JobCardContainer>
-        {cards.map(card => {
+        {searchResults?.reverse().map(card => {
           const {
+            id,
             title,
+            url,
             company,
-            location,
-            workType,
-            job,
+            position: {
+              location,
+              experienceLevel,
+              jobName,
+            },
             expiration,
             dDay,
             applyCount,
-            imageUrl,
           } = card;
 
           return (
             <TinderCard
               className="swipe"
-              key={title}
+              key={id}
               preventSwipe={['up', 'down']}
               onSwipe={(direction) => handleSwipeCard(direction, card)}
             >
               <JobCard>
                 <JobImageWrapper>
-                  <img src={imageUrl} alt="기업 사진" />
+                  <img
+                    src={`images/temp/${Math.floor((Math.random() * 20 + 1))}.jpg`}
+                    alt="기업 사진"
+                  />
                   <JobApplyConut>
                     <img src="images/icon_person.svg" alt="지원자 수" />
                     <div>{applyCount}</div>
@@ -218,11 +171,13 @@ function JobCards() {
                 </JobImageWrapper>
                 <Container>
                   <JobTitle>{title}</JobTitle>
-                  <JobCompanyName>{company}</JobCompanyName>
+                  <JobCompanyName>
+                    <a href={url}>{company}</a>
+                  </JobCompanyName>
                   <JobTags>
                     <JobTag>{location}</JobTag>
-                    <JobTag>{workType}</JobTag>
-                    <JobTag>{job}</JobTag>
+                    <JobTag>{experienceLevel}</JobTag>
+                    <JobTag>{jobName}</JobTag>
                   </JobTags>
                   <JobExpirationWrapper>
                     <JobExpiration>{expiration}</JobExpiration>

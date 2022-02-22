@@ -6,6 +6,7 @@ import {
   fetchJobCategories,
   fetchJobTypeCategories,
   fetchLocationCategories,
+  requestSearch,
 } from '../apis/search';
 import CategoryModal from '../components/CategoryModal';
 import JobCards from '../components/JobCards';
@@ -117,7 +118,7 @@ function Search({ token }: {
   const [isjobTypeModalOpen, setIsjobTypeModalOpen] = useState(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
 
-  const [result, setReult] = useState(new Array(10).fill(true));
+  const [searchResults, setSearchReults] = useState<any[]>([]);
 
   useEffect(() => {
     (function() {
@@ -186,6 +187,27 @@ function Search({ token }: {
     }
   };
 
+  const handleSearch = async () => {
+    let sorting = 'pd';
+    if (sort === '인기순') {
+      sorting = 'rc';
+    }
+
+    const searchParams = {
+      keyword,
+      start: 0,
+      count: 10,
+      job,
+      loc_mcd: location,
+      loc_bcd: location,
+      jobType,
+      sort: sorting,
+    };
+    const { jobs } = await requestSearch(searchParams);
+    console.log(jobs);
+    setSearchReults(jobs);
+  };
+
   return (
     <>
       <Container>
@@ -207,6 +229,7 @@ function Search({ token }: {
           <SearchBar
             keyword={keyword}
             handleKeyword={handleKeyword}
+            handleSearch={handleSearch}
           />
           <SearchCategories>
             <SearchCategory onClick={() => openModal('직무')}>
@@ -269,7 +292,7 @@ function Search({ token }: {
         isOpen={isSortModalOpen}
         closeModal={() => closeModal('정렬')}
       />
-      <JobCards />
+      <JobCards searchResults={searchResults} />
       {isTutorialView && <GestureTutorial>
         <img src="images/tutorial-background.png" alt="" />
         <div>

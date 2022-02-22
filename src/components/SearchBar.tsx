@@ -5,6 +5,7 @@ import mixins from '../styles/mixins';
 interface SearchBarProps {
   keyword: string;
   handleKeyword: any;
+  handleSearch: () => Promise<void>;
 }
 
 const SearchContainer = styled.div`
@@ -31,7 +32,11 @@ const SearchIcon = styled.div`
   height: 24px;
 `;
 
-function SearchBar({ keyword, handleKeyword }: SearchBarProps) {
+function SearchBar({
+  keyword,
+  handleKeyword,
+  handleSearch,
+}: SearchBarProps) {
   return (
     <SearchContainer>
       <SearchInput
@@ -41,7 +46,7 @@ function SearchBar({ keyword, handleKeyword }: SearchBarProps) {
         value={keyword}
         onChange={handleKeyword}
       />
-      <SearchIcon>
+      <SearchIcon onClick={handleSearch}>
         <img src="images/icon_magnifier.svg" alt="검색" />
       </SearchIcon>
     </SearchContainer>
