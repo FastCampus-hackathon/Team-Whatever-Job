@@ -12,7 +12,7 @@ const CompareGrid = styled.ul`
   gap: 8px 0;
   overflow: auto;
   white-space: nowrap;
-  margin-top: 40px;
+  margin-top: 24px;
 `;
 
 const CompareGridHeader = styled.li`
@@ -58,6 +58,21 @@ const CompareGridCell = styled.li`
   }
 `;
 
+const Groups = styled.ul`
+  display: flex;
+  gap: 8px;
+  margin-top: 24px;
+`;
+
+const Group = styled.li` 
+  ${mixins.fontStyle.body_03};
+  color: ${({ theme }) => theme.colors.blue_02};
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: 4px 12px;
+  border: 1px solid ${({ theme }) => theme.colors.blue_02};
+  border-radius: 30px;
+`;
+
 function Compare({ selectedCardIds, setSelectedCardIds }: {
   selectedCardIds: number[],
   setSelectedCardIds: React.Dispatch<React.SetStateAction<number[]>>
@@ -81,6 +96,13 @@ function Compare({ selectedCardIds, setSelectedCardIds }: {
         <div>비교하기</div>
         <button onClick={handleClickSave}>저장</button>
       </Header>
+      {groups && <Groups>
+        {groups.map(group => (
+          <Group>
+            {group}
+          </Group>
+        ))}
+      </Groups>}
       <CompareGrid>
         <CompareGridHeader>기업명</CompareGridHeader>
         <CompareGridHeader>직무</CompareGridHeader>
