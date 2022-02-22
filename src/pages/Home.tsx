@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
@@ -23,6 +23,16 @@ const LoginButton = styled.button`
     text-decoration: none; 
     color: ${({ theme }) => theme.colors.white}; 
   }
+`;
+
+const MyPageButton = styled.button`
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  padding: 8px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: inherit;
 `;
 
 const LogoBox = styled.div`
@@ -66,6 +76,7 @@ export const SearchCategorySelected = styled.div`
 `;
 
 function Home() {
+  const [token, setToken] = useState<string | null>(null);
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
   const [location, setLocation] = useState('');
@@ -76,6 +87,12 @@ function Home() {
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isWorkTypeModalOpen, setIsWorkTypeModalOpen] = useState(false);
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
+
+  useEffect(() => {
+    if (localStorage.getItem('authToken') !== null) {
+      setToken(localStorage.getItem('authToken'));
+    }
+  }, []);
 
   const openModal = (category: string) => {
     if (category === '직무') {
@@ -116,9 +133,15 @@ function Home() {
   return (
     <>
       <Container>
-        <LoginButton>
-          <Link to="/signin">로그인</Link>
-        </LoginButton>
+        {token
+          ? <LoginButton>
+            <Link to="/signin">로그인</Link>
+          </LoginButton>
+          : <MyPageButton>
+            <Link to="/signin">
+              <img src="images/icon_my.png" alt="" />
+            </Link>
+          </MyPageButton>}
         <LogoBox>
           <img src="images/logo.png" alt="어구저구 로고" />
         </LogoBox>
