@@ -133,7 +133,7 @@ function Home() {
   return (
     <>
       <Container>
-        {token
+        {!token
           ? <LoginButton>
             <Link to="/signin">로그인</Link>
           </LoginButton>
