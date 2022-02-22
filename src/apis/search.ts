@@ -1,5 +1,16 @@
 import axios from 'axios';
 
+// 검색
+export async function requestSearch(params: any = {}) {
+  try {
+    const { data } = await axios.post('/post', params);
+
+    return data;
+  } catch (e) {
+    console.log(e);
+  }
+}
+
 // 카테고리 목록 조회
 export async function fetchJobCategories() {
   try {
