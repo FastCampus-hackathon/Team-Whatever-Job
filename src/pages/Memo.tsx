@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Container } from '../components/styled';
 import mixins from '../styles/mixins';
 
-const Header = styled.h1`
+export const Header = styled.h1`
   ${mixins.fontStyle.headline_03};
   display: flex;
   justify-content: space-between;
@@ -15,7 +15,7 @@ const Header = styled.h1`
 
   button {
     ${mixins.fontStyle.body_03};
-    color: ${({ theme }) => theme.colors.blue_01};;
+    color: ${({ theme }) => theme.colors.blue_01};
     background: inherit; 
     border: none; 
     cursor: pointer;
