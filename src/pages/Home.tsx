@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import CategoryModal from '../components/CategoryModal';
@@ -75,8 +75,10 @@ export const SearchCategorySelected = styled.div`
   color: ${({ theme }) => theme.colors.blue_01};
 `;
 
-function Home() {
-  const [token, setToken] = useState<string | null>(null);
+function Home({ token }: {
+  token: string | null
+}) {
+  const navigate = useNavigate();
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
   const [location, setLocation] = useState('');
@@ -89,9 +91,14 @@ function Home() {
   const [isSortModalOpen, setIsSortModalOpen] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem('authToken') !== null) {
-      setToken(localStorage.getItem('authToken'));
-    }
+    (function() {
+      if (window.localStorage) {
+        if (!localStorage.getItem('firstLoad')) {
+          localStorage['firstLoad'] = true;
+          window.location.reload();
+        } else { localStorage.removeItem('firstLoad'); }
+      }
+    })();
   }, []);
 
   const openModal = (category: string) => {
@@ -134,8 +141,8 @@ function Home() {
     <>
       <Container>
         {!token
-          ? <LoginButton>
-            <Link to="/signin">로그인</Link>
+          ? <LoginButton onClick={() => navigate('/signin')}>
+            로그인
           </LoginButton>
           : <MyPageButton>
             <Link to="/signin">
