@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import { requestSignUp } from '../apis/auth';
 import {
   Container,
   Header,
@@ -17,7 +18,6 @@ const Form = styled.form`
     margin-top: 96px;
   `;
 
-
 const AgreeLabel = styled.label`
     ${mixins.fontStyle.body_07};
     color: ${({ theme }) => theme.colors.grayscale_04};
@@ -29,7 +29,6 @@ const CheckBox = styled.input`
     height: 18px;
     vertical-align: middle;
   `;
-
 
 function SignUp() {
   const navigate = useNavigate();
@@ -56,8 +55,12 @@ function SignUp() {
       return;
     }
 
-    // TODO: 비동기 회원가입 요청
-    console.log('sign up!');
+    const res = await requestSignUp(id, password);
+    if (!res) {
+      alert('중복된 아이디입니다!');
+      return;
+    }
+
     navigate('/signin');
   };
 
