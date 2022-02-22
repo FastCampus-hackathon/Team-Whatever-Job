@@ -33,9 +33,9 @@ const MyPageButton = styled.button`
 `;
 
 const LogoBox = styled.div`
-img {
-  width: 124px;
-}
+  img {
+    width: 124px;
+  }
 `;
 
 const GestureTutorial = styled.div`
@@ -82,7 +82,7 @@ function Search() {
   const [workType, setWorkType] = useState('');
   const [sort, setSort] = useState('최신순');
 
-  const [isTutorialView, setIsTutorialView] = useState(true);
+  const [isTutorialView, setIsTutorialView] = useState(false);
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
   const [isWorkTypeModalOpen, setIsWorkTypeModalOpen] = useState(false);
@@ -90,10 +90,18 @@ function Search() {
 
   const [result, setReult] = useState(new Array(10).fill(true));
 
-  // useEffect(() => {
-  //   setIsTutorialView(false);
-  //   // TODO: 처음에만 뜨도록
-  // }, [deps]);
+  useEffect(() => {
+    (function() {
+      if (window.localStorage) {
+        if (!localStorage.getItem('firstLoad')) {
+          setIsTutorialView(true);
+          localStorage['firstLoad'] = true;
+        } else {
+          setIsTutorialView(false);
+        }
+      }
+    })();
+  }, []);
 
   const openModal = (category: string) => {
     if (category === '직무') {
