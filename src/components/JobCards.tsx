@@ -161,7 +161,7 @@ function JobCards({ searchResults }: {
               <JobCard>
                 <JobImageWrapper>
                   <img
-                    src={`images/temp/${Math.floor((Math.random() * 20 + 1))}.jpg`}
+                    src={`images/temp/${Math.floor(id % 20)}.jpg`}
                     alt="기업 사진"
                   />
                   <JobApplyConut>
@@ -175,7 +175,7 @@ function JobCards({ searchResults }: {
                     <a href={url}>{company}</a>
                   </JobCompanyName>
                   <JobTags>
-                    <JobTag>{location}</JobTag>
+                    <JobTag>{location.slice(0, 10)}</JobTag>
                     <JobTag>{experienceLevel}</JobTag>
                     <JobTag>{jobName}</JobTag>
                   </JobTags>

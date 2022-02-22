@@ -194,7 +194,7 @@ function Search({ token }: {
     }
 
     const searchParams = {
-      keyword,
+      keywords: keyword,
       start: 0,
       count: 10,
       job,
