@@ -1,11 +1,13 @@
-import { useState } from 'react';
 import Modal from 'react-modal';
 import styled from 'styled-components';
 
+import { fetchLocationDetailCategories } from '../apis/search';
 import mixins from '../styles/mixins';
 
 interface ModalProps {
   name: string;
+  data: string[];
+  setData?: React.Dispatch<React.SetStateAction<string[]>>;
   setCategory: React.Dispatch<React.SetStateAction<string>>;
   isOpen: boolean;
   closeModal: () => void;
@@ -68,11 +70,12 @@ const SelectButton = styled.button`
 
 function CategoryModal({
   name,
+  data,
+  setData,
   setCategory,
   isOpen,
   closeModal,
 }: ModalProps) {
-  const [categoryItems, setCategoryItems] = useState(new Array(20).fill('선택 아이템'));
 
   let isOneFr = false;
   if (name === '고용 형태' || name === '정렬') {
@@ -80,6 +83,20 @@ function CategoryModal({
   }
 
   const handleClickItem = (item: string) => {
+    // TODO: 카테고리에 뎁스있을 때 문제 해결
+    if (name === '지역 선택') {
+      setCategory(item);
+      (async () => {
+        const res = await fetchLocationDetailCategories(item);
+        console.log(res);
+        if (res !== undefined) {
+          setData(res);
+        }
+      })();
+
+      return;
+    }
+
     setCategory(item);
     closeModal();
   };
@@ -99,9 +116,9 @@ function CategoryModal({
         </ModalHeader>
 
         <Categories isOneFr={isOneFr}>
-          {categoryItems.map((item, i) => (
+          {data?.map((item) => (
             <CategoryItem
-              key={i}
+              key={item}
               onClick={() => handleClickItem(item)}
             >
               {item}

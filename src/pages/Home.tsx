@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
+import {
+  fetchJobCategories,
+  fetchJobTypeCategories,
+  fetchLocationCategories,
+} from '../apis/search';
 import CategoryModal from '../components/CategoryModal';
 import SearchBar from '../components/SearchBar';
 import { Container } from '../components/styled';
@@ -82,8 +87,13 @@ function Home({ token }: {
   const [keyword, handleKeyword] = useInput('');
   const [job, setJob] = useState('');
   const [location, setLocation] = useState('');
-  const [workType, setWorkType] = useState('');
+  const [workType, setJobType] = useState('');
   const [sort, setSort] = useState('최신순');
+
+  const [jobs, setJobs] = useState<string[]>([]);
+  const [locations, setLocations] = useState<string[]>([]);
+  const [jobTypes, setJobTypes] = useState<string[]>([]);
+  const sorts = ['최신순', '인기순'];
 
   const [isJobModalOpen, setIsJobModalOpen] = useState(false);
   const [isLocationModalOpen, setIsLocationModalOpen] = useState(false);
@@ -98,6 +108,24 @@ function Home({ token }: {
           window.location.reload();
         } else { localStorage.removeItem('firstLoad'); }
       }
+    })();
+  }, []);
+
+  // 카테고리 불러오기
+  useEffect(() => {
+    (async () => {
+      const res = await fetchJobCategories();
+      setJobs(res);
+    })();
+
+    (async () => {
+      const res = await fetchJobTypeCategories();
+      setJobTypes(res);
+    })();
+
+    (async () => {
+      const res = await fetchLocationCategories();
+      setLocations(res);
     })();
   }, []);
 
@@ -193,24 +221,28 @@ function Home({ token }: {
       </Container>
       <CategoryModal
         name="직무 선택"
+        data={jobs}
         setCategory={setJob}
         isOpen={isJobModalOpen}
         closeModal={() => closeModal('직무')}
       />
       <CategoryModal
         name="지역 선택"
+        data={locations}
         setCategory={setLocation}
         isOpen={isLocationModalOpen}
         closeModal={() => closeModal('지역')}
       />
       <CategoryModal
         name="고용 형태"
-        setCategory={setWorkType}
+        data={jobTypes}
+        setCategory={setJobType}
         isOpen={isWorkTypeModalOpen}
         closeModal={() => closeModal('고용 형태')}
       />
       <CategoryModal
         name="정렬"
+        data={sorts}
         setCategory={setSort}
         isOpen={isSortModalOpen}
         closeModal={() => closeModal('정렬')}
