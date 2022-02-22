@@ -9,6 +9,7 @@ const Header = styled.h1`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-top: 56px; 
   padding: 12px 0;
   border-bottom: 1px solid ${({ theme }) => theme.colors.grayscale_07};
 
@@ -29,7 +30,7 @@ const Header = styled.h1`
 const JobTitle = styled.h3`
   ${mixins.fontStyle.body_02};
   margin-top: 24px;
-  margin-left: 8px;
+  margin-left: 8 px;
 `;
 
 const MemoArea = styled.textarea`

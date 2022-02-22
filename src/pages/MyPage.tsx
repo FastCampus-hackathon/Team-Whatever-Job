@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, Route, Routes, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 import {
@@ -13,6 +13,7 @@ import {
 } from '../components/JobCards';
 import { Container } from '../components/styled';
 import mixins from '../styles/mixins';
+import Compare from './Compare';
 
 interface MyJobCardProps {
   id: number;
@@ -150,7 +151,11 @@ const CompareButton = styled.button<any>`
   )};
 `;
 
-function MyPage() {
+function MyPage({ selectedCardIds, setSelectedCardIds }: {
+  selectedCardIds: number[],
+  setSelectedCardIds: React.Dispatch<React.SetStateAction<number[]>>
+}) {
+  const navigate = useNavigate();
   const [cards, setCards] = useState<MyJobCardProps[]>([
     {
       id: 1,
@@ -213,7 +218,6 @@ function MyPage() {
       memo: '',
     },
   ]);
-  const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
 
   const handleToggleCheck = (id: number) => {
     if (selectedCardIds.includes(id)) {
@@ -299,7 +303,10 @@ function MyPage() {
         <DeleteButton>
           <img src="images/button_delete.png" alt="삭제" />
         </DeleteButton>
-        <CompareButton isActive={selectedCardIds.length}>
+        <CompareButton
+          isActive={selectedCardIds.length}
+          onClick={() => navigate('/compare')}
+        >
           비교하기
         </CompareButton>
       </ButtonBox>

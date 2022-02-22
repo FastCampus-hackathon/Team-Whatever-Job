@@ -1,7 +1,9 @@
+import { useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { ThemeProvider } from 'styled-components';
 import { Reset } from 'styled-reset';
 
+import Compare from './pages/Compare';
 import Home from './pages/Home';
 import Memo from './pages/Memo';
 import MyPage from './pages/MyPage';
@@ -11,6 +13,8 @@ import SignUp from './pages/SignUp';
 import theme from './styles/theme';
 
 function App() {
+  const [selectedCardIds, setSelectedCardIds] = useState<number[]>([]);
+
   return (
     <div className="App">
       <Reset />
@@ -20,8 +24,21 @@ function App() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/search" element={<Search />} />
-          <Route path="/mypage" element={<MyPage />} />
+          <Route
+            path="/mypage"
+            element={<MyPage
+              selectedCardIds={selectedCardIds}
+              setSelectedCardIds={setSelectedCardIds}
+            />}
+          />
           <Route path="/memo/*" element={<Memo />} />
+          <Route
+            path="/compare"
+            element={<Compare
+              selectedCardIds={selectedCardIds}
+              setSelectedCardIds={setSelectedCardIds}
+            />}
+          />
         </Routes>
       </ThemeProvider>
     </div>
